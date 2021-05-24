@@ -152,7 +152,7 @@ def main():
     # 按照修改时间排序，最早的最先出现
     books=sorted(os.listdir(target_dir),key=lambda x: os.path.getmtime(os.path.join(target_dir, x)),reverse=True)
     for each in books:
-        if each.endswith(".pdf") and (not "isbnisbn" in each):
+        if each.endswith(".pdf") and (not "isbnisbn" in each) and (not 'dbdb' in each):
             this_book_name_with_pdf=each
             this_keyword_str=get_keyword_str(this_book_name_with_pdf)
             this_infos,this_links,this_titles=get_items_from_fetch(this_keyword_str)
@@ -166,10 +166,10 @@ def main():
                 move_when_fetch_empty(this_book_name_with_pdf)
                 continue
             isbn=fetch_isbn_from_link(pick_link)
-            print(f"ISBN:{isbn}")
             if isbn==None:
-                print(pick_link)
+                # print(pick_link)
                 isbn=re.findall("%2Fsubject%2F(\d+)%2F&query=",pick_link)[0]
+            print(f"ISBN:{isbn}")
             new_name=get_new_name(this_book_name_with_pdf,isbn)
             this_book_name_with_pdf=f"{target_dir}{os.sep}{this_book_name_with_pdf}"
             os.rename(this_book_name_with_pdf,new_name)
